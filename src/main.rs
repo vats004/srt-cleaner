@@ -9,22 +9,22 @@ fn process_srt_file(input_path: &str, output_path: &str) -> io::Result<()> {
     for line in reader.lines() {
         let mut line = line?;
 
-        // Only process lines that aren't just numbers (sequence numbers)
+        // only process lines that aren't just numbers (sequence numbers)
         // and aren't timestamp lines (containing -->)
         if !line.trim().chars().all(|c| c.is_numeric())
             && !line.contains("-->")
             && !line.trim().is_empty()
         {
-            // Remove periods that are at the end of words but not at the end of sentences
+            // remove periods that are at the end of words but not at the end of sentences
             let mut processed = String::new();
             let words: Vec<&str> = line.split_whitespace().collect();
 
             for (i, word) in words.iter().enumerate() {
                 let mut cleaned_word = *word;
 
-                // Remove period if it's at the end of a word and:
-                // 1. it's not the last word in the line, or
-                // 2. The word is all uppercase
+                // remove period if it's at the end of a word and:
+                // (1) it's not the last word in the line, or
+                // (2) the word is all uppercase
                 if word.ends_with('.') && (i != words.len() - 1 || word == &word.to_uppercase()) {
                     cleaned_word = &word[..word.len() - 1];
                 }
